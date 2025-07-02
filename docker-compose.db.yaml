@@ -1,0 +1,59 @@
+services:
+  # DB section
+  # ProductDB: MySQL
+  ProductDB:
+    image: mysql:8.0
+    container_name: ProductDB_Container
+    environment:
+      - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_DATABASE=Product_DB
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=123
+    ports:
+      - "3308:3306"
+    networks:
+      - aspcore-network
+    volumes:
+      - ProductDB_Data:/var/lib/mysql
+
+  # CustomerDB: PostgreSQL
+  CustomerDB:
+    image: postgres:14 
+    container_name: CustomerDB_Container
+    environment:
+      POSTGRES_USER: admin         
+      POSTGRES_PASSWORD: 123  
+      POSTGRES_DB: Customer_DB     
+    volumes:
+      - CustomerDB_Data:/var/lib/postgresql/data  
+    ports:
+      - "5435:5432"  
+    networks:
+      - aspcore-network
+      
+  # BasketDB: Redis
+  BasketDB:
+    image: redis:7.4
+    container_name: BasketDB_Container
+    ports:
+      - "6379:6379"
+    networks:
+      - aspcore-network
+    volumes:
+      - BasketDB_Data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    
+  # OrderingDB: SQL Server
+  OrderingDB:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: OrderingDB_Container
+    restart: always
+    environment:
+      SA_PASSWORD: "123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1435:1433"
+    volumes:
+      - OrderingDB_Data:/var/opt/mssql
+    networks:
+      - aspcore-network

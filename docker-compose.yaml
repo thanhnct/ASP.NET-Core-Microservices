@@ -1,0 +1,27 @@
+services:
+  # Services section
+  # RabbitMQ: Message Broker
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: RabbitMQ_Container
+    restart: always
+    ports:
+      - "5672:5672"  # This port for the communicate application
+      - "15672:15672" # This port for the ui management
+    networks:
+        - aspcore-network
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: 123
+    volumes:
+      - RabbitMQ_Data:/var/lib/rabbitmq
+
+networks:
+  aspcore-network:
+
+volumes:
+  ProductDB_Data:
+  CustomerDB_Data:
+  BasketDB_Data:
+  OrderingDB_Data:
+  RabbitMQ_Data:

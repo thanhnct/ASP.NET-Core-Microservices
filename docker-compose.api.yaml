@@ -1,0 +1,77 @@
+services:
+  # API section
+  # ProductAPI: ASP.NET Core API for Products
+  ProductAPI:
+    image: ${DOCKER_REGISTRY-}product-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Product.API/Dockerfile
+    container_name: ProductAPI_Container
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings:DefaultConnectionString=Server=ProductDB;Port=3308;Database=Product_DB;User Id=admin;Password=123;
+    networks:
+      - aspcore-network
+    depends_on:
+      - ProductDB
+    ports:
+      - "6002:80"
+    restart: always
+
+  # CustomerAPI: ASP.NET Core API for Customers
+  CustomerAPI:
+    image: ${DOCKER_REGISTRY-}customer-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Customer.API/Dockerfile
+    container_name: CustomerAPI_Container
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings:DefaultConnectionString=Server=CustomerDB;Port=5435;Database=Customer_DB;User Id=admin;Password=123;
+    networks:
+      - aspcore-network
+    depends_on:
+      - CustomerDB
+    ports:
+      - "6003:80"
+    restart: always
+
+  # BasketAPI: ASP.NET Core API for Shopping Basket
+  BasketAPI:
+    image: ${DOCKER_REGISTRY-}basket-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Basket.API/Dockerfile
+    container_name: BasketAPI_Container
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "CacheSettings:ConnectionString=BasketDB:6379"
+    networks:
+      - aspcore-network
+    depends_on:
+      - BasketDB
+    ports:
+      - "6004:80"
+    restart: always
+
+  # OrderingAPI: ASP.NET Core API for Orders
+  # OrderingAPI:
+    # image: ${DOCKER_REGISTRY-}ordering-api:${PLATFORM:-linux}-${TAG:-latest}
+    # build:
+      # context: .
+      # dockerfile: src/Services/Ordering/Ordering.API/Dockerfile
+    # container_name: OrderingAPI_Container
+    # environment:
+      # - ASPNETCORE_ENVIRONMENT=Development
+      # - ASPNETCORE_URLS=http://+:80
+      # - ConnectionStrings:DefaultConnectionString=Server=OrderingDB;Database=Ordering_DB;User Id=sa;Password=123;MultipleActiveResultSets=true;TrustServerCertificate=True;
+    # networks:
+      # - aspcore-network
+    # depends_on:
+      # - OrderingDB
+    # ports:
+      # - "6005:80"
+    # restart: always
