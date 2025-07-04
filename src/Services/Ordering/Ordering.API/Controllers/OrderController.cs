@@ -37,22 +37,22 @@ namespace Ordering.API.Controllers
             return Ok(order);
         }
 
-        //[HttpPut("{id:long}")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //public async Task<IActionResult> UpdateOrder([FromBody] UpdateOrderCommand command)
-        //{
-        //    await _mediator.Send(command);
-        //    return NoContent();
-        //}
+        [HttpPut("{id:long}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateOrder([FromBody] UpdateOrderCommand command)
+        {
+            await _mediator.Send(command);
+            return NoContent();
+        }
 
-        //[HttpDelete("{id:long}")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //public async Task<IActionResult> DeleteOrder([FromRoute] long id)
-        //{
-        //    var command = new DeleteOrderCommand(id);
-        //    await _mediator.Send(command);
-        //    return NoContent();
-        //}
+        [HttpDelete("{id:long}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> DeleteOrder([FromRoute] long id)
+        {
+            var command = new DeleteOrderCommand(id);
+            await _mediator.Send(command);
+            return NoContent();
+        }
 
         [HttpGet("test-email")]
         public async Task<IActionResult> TestEmail()
