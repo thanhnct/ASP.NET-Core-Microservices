@@ -26,7 +26,6 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         };
 
         var result = await _productRepository.CreateAsync(product);
-        await _productRepository.SaveChangeAsync();
 
         return new ApiSuccessResult<long>(result);
     }

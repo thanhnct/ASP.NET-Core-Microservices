@@ -31,7 +31,6 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
         product.Price = request.Price;
 
         await _productRepository.UpdateAsync(product);
-        await _productRepository.SaveChangeAsync();
 
         return new ApiSuccessResult<bool>(true);
     }

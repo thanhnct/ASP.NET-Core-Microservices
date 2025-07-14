@@ -25,7 +25,6 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand,
         }
 
         await _productRepository.DeleteAsync(product);
-        await _productRepository.SaveChangeAsync();
 
         return new ApiSuccessResult<bool>(true);
     }
