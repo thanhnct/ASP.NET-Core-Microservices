@@ -1,6 +1,8 @@
 using Common.Logging;
-using Product.API.Data;
 using Product.API.Extensions;
+using Product.Application;
+using Product.Infrastructure;
+using Product.Infrastructure.Persistence;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -21,13 +23,29 @@ try
 
     void ConfigureService()
     {
-        builder.Services.AddInfrastructure(builder.Configuration);
+        // Add controllers
+        builder.Services.AddControllers();
+        
+        // Add API documentation
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        
+        // Add Clean Architecture layers
+        builder.Services.AddApplicationServices();
+        builder.Services.AddInfrastructureServices(builder.Configuration);
     }
 
     void Configure()
     {
-        app.UseInfrastucture(builder.Environment);
+        // Configure the HTTP request pipeline
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
 
+        app.UseHttpsRedirection();
+        app.UseAuthorization();
         app.MapControllers();
 
         app.MigrationDatabase<ProductContext>().Run();
